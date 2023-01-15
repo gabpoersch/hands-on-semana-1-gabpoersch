@@ -3,7 +3,7 @@ package com.eldorado.helper;
 public class Helper {
 
     public static Integer readInteger(String value) {
-        if(value == null) {
+        if(value == null || value == "") {
             value = String.valueOf(0);
         }
         try {
@@ -15,7 +15,7 @@ public class Helper {
     }
 
     public static Double readDouble(String value) {
-        if(value == null) {
+        if(value == null || value == "") {
             value = String.valueOf(0);
         }
         try {

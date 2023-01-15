@@ -8,9 +8,9 @@ import java.util.List;
 
 public class InvoiceService {
 
-    File file = new File("C:\\Users\\Software Development\\Desktop\\Eldorado Tech\\hands-on-semana-1-gabpoersch\\src\\main\\resources\\txt", "faturamento.txt");
+    File file = new File("C:\\Users\\Software Development\\Desktop\\Eldorado Tech\\hands-on-semana-1-gabpoersch\\src\\main\\resources\\txt", "nota.txt");
 
-    public static List<Invoice> readCSV(String filePath) {
+    public static List<Invoice> readInvoiceCSV(String filePath) {
         List<Invoice> invoices = new ArrayList<>();
         String line = "";
 
@@ -29,7 +29,6 @@ public class InvoiceService {
                 invoice.setIssuingDate(values[4]);
                 invoice.setInvoice(values[5]);
 
-                System.out.println(invoice);
                 invoices.add(invoice);
             }
 
@@ -37,7 +36,7 @@ public class InvoiceService {
             e.printStackTrace();
         }
 
-        System.out.println(invoices.size());
+        System.out.println("Invoice List size: " + invoices.size());
         return invoices;
     }
 
