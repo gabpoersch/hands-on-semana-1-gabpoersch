@@ -1,5 +1,7 @@
 package com.eldorado.entity;
 
+import com.eldorado.helper.Helper;
+
 public class Invoice {
     private String company;
     private int month;
@@ -36,6 +38,9 @@ public class Invoice {
     public void setMonth(int month) {
         this.month = month;
     }
+    public void setMonth(String month) {
+        this.year = Helper.readInteger(month);
+    }
 
     public int getYear() {
         return year;
@@ -44,6 +49,9 @@ public class Invoice {
     public void setYear(int year) {
         this.year = year;
     }
+    public void setYear(String year) {
+        this.year = Helper.readInteger(year);
+    }
 
     public double getValue() {
         return value;
@@ -51,6 +59,10 @@ public class Invoice {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public void setValue(String value) {
+        this.value = Helper.readDouble(value);
     }
 
     public String getIssuingDate() {
