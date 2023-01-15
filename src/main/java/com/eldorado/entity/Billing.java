@@ -2,13 +2,14 @@ package com.eldorado.entity;
 
 import com.eldorado.helper.Helper;
 
-public class Billing {
+public class Billing implements Comparable<Billing>{
     private String company;
     private int month;
     private int year;
     private Installment firstInstallment;
     private Installment secondInstallment;
     private Installment thirdInstallment;
+    private double totalValue;
 
     public String getCompany() {
         return company;
@@ -58,6 +59,14 @@ public class Billing {
         this.thirdInstallment = thirdInstallment;
     }
 
+    public double getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(double totalValue) {
+        this.totalValue = totalValue;
+    }
+
     @Override
     public String toString() {
         return "Billing{" +
@@ -67,6 +76,12 @@ public class Billing {
                 ", firstInstallment=" + firstInstallment +
                 ", secondInstallment=" + secondInstallment +
                 ", thirdInstallment=" + thirdInstallment +
+                ", total=" + totalValue +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Billing o) {
+        return 0;
     }
 }

@@ -2,7 +2,7 @@ package com.eldorado.entity;
 
 import com.eldorado.helper.Helper;
 
-public class Invoice {
+public class Invoice implements Comparable<Invoice>{
     private String company;
     private int month;
     private int year;
@@ -39,7 +39,7 @@ public class Invoice {
         this.month = month;
     }
     public void setMonth(String month) {
-        this.year = Helper.readInteger(month);
+        this.month = Helper.readInteger(month);
     }
 
     public int getYear() {
@@ -91,5 +91,10 @@ public class Invoice {
                 ", issuingDate='" + issuingDate + '\'' +
                 ", invoice='" + invoice + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Invoice o) {
+        return 0;
     }
 }
