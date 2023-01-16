@@ -2,7 +2,7 @@ package com.eldorado.entity;
 
 import com.eldorado.helper.Helper;
 
-public class Billing implements Comparable<Billing>{
+public class Billing implements Comparable<Billing> {
     private String company;
     private int month;
     private int year;
