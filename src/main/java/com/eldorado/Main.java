@@ -6,6 +6,7 @@ import com.eldorado.service.BillingService;
 import com.eldorado.service.InvoiceService;
 import org.w3c.dom.ls.LSOutput;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,43 +19,42 @@ public class Main {
         String invoicePath = "C:\\Users\\Software Development\\Desktop\\Eldorado Tech\\hands-on-semana-1-gabpoersch\\src\\main\\resources\\txt\\nota.txt";
         String billingPath = "C:\\Users\\Software Development\\Desktop\\Eldorado Tech\\hands-on-semana-1-gabpoersch\\src\\main\\resources\\txt\\faturamento.txt";
 
-        List<Invoice> invoices = InvoiceService.readInvoiceCSV(invoicePath);
-        List<Billing> billings = BillingService.readBillingCSV(billingPath);
+        List<Invoice> invoiceList = InvoiceService.readInvoiceCSV(invoicePath);
+        List<Billing> billingList = BillingService.readBillingCSV(billingPath);
 
-        Map<String, Map<String, List<Invoice>>> invoiceMap = invoices.stream()
+        Map<String, Map<String, List<Invoice>>> invoiceMap = invoiceList.stream()
                 .collect(Collectors.groupingBy(Invoice::getCompany,
                         Collectors.groupingBy(invoice -> invoice.getMonth() + "/" + invoice.getYear())));
 
-        Map<String, Map<String, List<Billing>>> billingMap = billings.stream()
+        Map<String, Map<String, List<Billing>>> billingMap = billingList.stream()
                 .collect(Collectors.groupingBy(Billing::getCompany,
                         Collectors.groupingBy(billing -> billing.getMonth() + "/" + billing.getYear())));
 
+        List<String> stringList = invoiceList.stream()
+                .collect(Collectors.groupingBy(Invoice::getCompany,
+                        Collectors.groupingBy(invoice -> invoice.getMonth() + "/" + invoice.getYear())))
+                .entrySet().stream()
+                .flatMap(outerEntry -> outerEntry.getValue().entrySet().stream()
+                        .flatMap(innerEntry -> innerEntry.getValue().stream()
+                                .map(invoice -> outerEntry.getKey() + "," + innerEntry.getKey() + "," + invoice.getValue())))
+                .collect(Collectors.toList());
 
+        System.out.println(stringList.size());
 
+        List<String> stringList2 = billingList.stream()
+                .collect(Collectors.groupingBy(Billing::getCompany,
+                        Collectors.groupingBy(billing -> billing.getMonth() + "/" + billing.getYear())))
+                .entrySet().stream()
+                .flatMap(outerEntry -> outerEntry.getValue().entrySet().stream()
+                        .flatMap(innerEntry -> innerEntry.getValue().stream()
+                                .map(billing -> outerEntry.getKey() + "," + innerEntry.getKey() + "," + billing.getTotalValue())))
+                .collect(Collectors.toList());
 
-//        invoiceMap.entrySet().stream()
-//                .filter(invoiceEntry -> billingMap.containsKey(invoiceEntry.getKey()))
-//                .flatMap(invoiceEntry -> invoiceEntry.getValue().entrySet().stream()
-//                        .filter(invoiceList -> billingMap.get(invoiceEntry.getKey()).containsKey(invoiceList.getKey()))
-//                        .flatMap(invoiceList -> invoiceList.getValue().stream()
-//                                .filter(invoice -> billingMap.get(invoiceEntry.getKey()).get(invoiceList.getKey()).stream()
-//                                        .anyMatch(billing -> invoice.getValue() == billing.getTotalValue()))
-//                                .map(invoice -> "Matched: " + invoice.getCompany() + " " + invoiceList.getKey())))
-//                .forEach(System.out::println);
+        System.out.println(stringList2.size());
 
+        stringList.removeIf(stringList2::contains);
 
-
-
-
-//        - agrupar lista 2 por empresa
-//        - iterar sobre esse resultado agrupado
-//        - pra cada iteração, verificar se X bate com find(companhia).total da lista 1
-//                - se bate, inserir +1 linha no xls de quitadas
-//                - se não bate, inserir +1 linha no xls de inadimplente
-//
-        System.out.println(invoiceMap.get("f9af79a2edb58bc6327ea8bd00e21fb8ca5b55a56077f5664480a23cdd2097e7"));
-        System.out.println(billingMap.get("f9af79a2edb58bc6327ea8bd00e21fb8ca5b55a56077f5664480a23cdd2097e7"));
-
-
+        System.out.println(stringList.size());
+        System.out.println(stringList2.size());
     }
 }
