@@ -43,7 +43,11 @@ public class Main {
                                 .map(invoice -> outerEntry.getKey() + "," + innerEntry.getKey() + "," + invoice.getValue())))
                 .collect(Collectors.toList());
 
-        System.out.println(invoiceStringList.size());
+        List<String> companiesBefore = invoiceStringList.stream()
+                .map(s -> s.split(",")[0])
+                .distinct()
+                .collect(Collectors.toList());
+
 
         List<String> billingStringList = billingList.stream()
                 .collect(Collectors.groupingBy(Billing::getCompany,
@@ -56,21 +60,31 @@ public class Main {
 
         invoiceStringList.removeIf(billingStringList::contains);
 
-        List<String> companies = invoiceStringList.stream()
+        List<String> companiesAfter = invoiceStringList.stream()
                 .map(s -> s.split(",")[0])
                 .distinct()
                 .collect(Collectors.toList());
 
-        System.out.println(invoiceStringList.size());
-//
-//        try (BufferedWriter bw = new BufferedWriter(new FileWriter("companies.txt"))) {
-//            for (String company : companies) {
-//                bw.write(company);
-//                bw.newLine();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        companiesBefore.removeIf(companiesAfter::contains);
+
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("compliant_companies.txt"))) {
+            for (String company : companiesBefore) {
+                bw.write(company);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("defaulter_companies.txt"))) {
+            for (String company : companiesAfter) {
+                bw.write(company);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
