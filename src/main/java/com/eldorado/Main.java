@@ -6,7 +6,11 @@ import com.eldorado.service.BillingService;
 import com.eldorado.service.InvoiceService;
 import org.w3c.dom.ls.LSOutput;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,7 +34,7 @@ public class Main {
                 .collect(Collectors.groupingBy(Billing::getCompany,
                         Collectors.groupingBy(billing -> billing.getMonth() + "/" + billing.getYear())));
 
-        List<String> stringList = invoiceList.stream()
+        List<String> invoiceStringList = invoiceList.stream()
                 .collect(Collectors.groupingBy(Invoice::getCompany,
                         Collectors.groupingBy(invoice -> invoice.getMonth() + "/" + invoice.getYear())))
                 .entrySet().stream()
@@ -39,9 +43,9 @@ public class Main {
                                 .map(invoice -> outerEntry.getKey() + "," + innerEntry.getKey() + "," + invoice.getValue())))
                 .collect(Collectors.toList());
 
-        System.out.println(stringList.size());
+        System.out.println(invoiceStringList.size());
 
-        List<String> stringList2 = billingList.stream()
+        List<String> billingStringList = billingList.stream()
                 .collect(Collectors.groupingBy(Billing::getCompany,
                         Collectors.groupingBy(billing -> billing.getMonth() + "/" + billing.getYear())))
                 .entrySet().stream()
@@ -50,11 +54,25 @@ public class Main {
                                 .map(billing -> outerEntry.getKey() + "," + innerEntry.getKey() + "," + billing.getTotalValue())))
                 .collect(Collectors.toList());
 
-        System.out.println(stringList2.size());
+        invoiceStringList.removeIf(billingStringList::contains);
 
-        stringList.removeIf(stringList2::contains);
+        List<String> companies = invoiceStringList.stream()
+                .map(s -> s.split(",")[0])
+                .distinct()
+                .collect(Collectors.toList());
 
-        System.out.println(stringList.size());
-        System.out.println(stringList2.size());
+        System.out.println(invoiceStringList.size());
+//
+//        try (BufferedWriter bw = new BufferedWriter(new FileWriter("companies.txt"))) {
+//            for (String company : companies) {
+//                bw.write(company);
+//                bw.newLine();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
+
     }
 }
