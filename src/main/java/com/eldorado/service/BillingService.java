@@ -10,11 +10,13 @@ import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.groupingBy;
+
 public class BillingService {
 
     File file = new File("C:\\Users\\Software Development\\Desktop\\Eldorado Tech\\hands-on-semana-1-gabpoersch\\src\\main\\resources\\txt", "faturamento.txt");
 
-    public static Stream<Billing> readBillingCSV(String filePath) {
+    public static List<Billing> readBillingCSV(String filePath) {
         List<Billing> billingList = new ArrayList<>();
         String line = "";
 
@@ -45,10 +47,10 @@ public class BillingService {
             e.printStackTrace();
         }
 
-        billingList.sort(Comparator.comparing(Billing::getCompany));
+        billingList.sort(Comparator.comparing(Billing::getCompany).thenComparing(Billing::getYear).thenComparing(Billing::getMonth));
 
         System.out.println("Billing List size: " + billingList.size());
-        return billingList.stream();
+        return billingList;
     }
 
 }

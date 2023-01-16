@@ -8,13 +8,12 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class InvoiceService {
 
     File file = new File("C:\\Users\\Software Development\\Desktop\\Eldorado Tech\\hands-on-semana-1-gabpoersch\\src\\main\\resources\\txt", "nota.txt");
 
-    public static Stream<Invoice> readInvoiceCSV(String filePath) {
+    public static List<Invoice> readInvoiceCSV(String filePath) {
         List<Invoice> invoices = new ArrayList<>();
         String line = "";
 
@@ -40,10 +39,11 @@ public class InvoiceService {
             e.printStackTrace();
         }
 
-        invoices.sort(Comparator.comparing(Invoice::getCompany));
+        invoices.sort(Comparator.comparing(Invoice::getCompany).thenComparing(Invoice::getYear).thenComparing(Invoice::getMonth));
+
 
         System.out.println("Invoice List size: " + invoices.size());
-        return invoices.stream();
+        return invoices;
     }
 
 }
